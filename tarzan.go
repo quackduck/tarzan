@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -9,13 +8,18 @@ import (
 )
 
 func main () {
-	if len(os.Args) == 1 {
-		handleErr(errors.New("No arguments provided for compressing or decompressing"))
-		printHelp()
+	if len(os.Args) == 1 { // no args (go sets os.Args[1] to the executable's path)
+		toCompress, _ := ioutil.ReadAll(os.Stdin) // compress stdin and send to stdout
+		fmt.Printf("%s", compressBytes(toCompress))
 		return
 	}
 	if os.Args[1] == "--decompress" || os.Args[1] == "-d" {
-		Decompress(os.Args[2])
+		if len(os.Args) == 2 { // only the option has been given so decompress stdin and send to stdout
+			toDecompress, _ := ioutil.ReadAll(os.Stdin)
+			fmt.Printf("%s", decompressBytes(toDecompress))
+		} else {
+			Decompress(os.Args[2])
+		}
 		return
 	}
 	if os.Args[1] == "--help" || os.Args[1] == "-h" {
