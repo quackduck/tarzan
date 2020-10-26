@@ -48,7 +48,7 @@ chmod +x /usr/local/bin/tarzan
 ```
 *Note: you might need to change the architecture/os in the url above. The other choice for a Unix OS is `freebsd`. Other architectures available are `arm64`, `arm_6` and `386`*
 ### Windows install
-Just grab an executable from [this directory](dist) 
+Download the latest [release](https://github.com/quackduck/tarzan/releases) 
 
 
 ## Uninstalling
