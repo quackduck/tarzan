@@ -25,7 +25,7 @@ tarzan --help/-h | --decompress/d <path> | <path>
 
 ## Installing
 
-You can grab an executable from [this directory](dist) or follow the install steps below.
+You can grab an executable from [releases](https://github.com/quackduck/tarzan/releases) or follow the install steps below.
 
 ### macOS
 
