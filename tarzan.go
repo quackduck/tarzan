@@ -46,13 +46,13 @@ func decompressBytes (toDecompress []byte) (decompressed []byte) {
 
 func Decompress (path string) {
 	toDecompress, err := ioutil.ReadFile(path)
-	handleErr(err)
+	if handleErr(err) {return}
 	decompressed := decompressBytes(toDecompress)
 	out, err := os.Create(strings.TrimSuffix(path, ".tarzan")) // TODO: maybe add a condition to check if file ends with .tarzan
-	handleErr(err)
+	if handleErr(err) {return}
 	defer out.Close()
 	_, err = out.Write(decompressed)
-	handleErr(err)
+	if handleErr(err) {return}
 }
 
 func compressBytes (toCompress []byte) (compressed []byte) {
@@ -62,19 +62,21 @@ func compressBytes (toCompress []byte) (compressed []byte) {
 
 func Compress (path string) {
 	toCompress, err := ioutil.ReadFile(path)
-	handleErr(err)
+	if handleErr(err) {return}
 	compressed := compressBytes(toCompress)
 	out, err := os.Create(path + ".tarzan")
-	handleErr(err)
+	if handleErr(err) {return}
 	defer out.Close()
 	_, err = out.Write(compressed)
-	handleErr(err)
+	if handleErr(err) {return}
 }
 
-func handleErr (err error) {
+func handleErr (err error) bool {
 	if err != nil {
 		fmt.Println("tarzan: error:", err)
+		return true
 	}
+	return false
 }
 
 
