@@ -48,7 +48,7 @@ func Decompress (path string) {
 	toDecompress, err := ioutil.ReadFile(path)
 	if handleErr(err) {return}
 	decompressed := decompressBytes(toDecompress)
-	out, err := os.Create(strings.TrimSuffix(path, ".tarzan")) // TODO: maybe add a condition to check if file ends with .tarzan
+	out, err := os.Create(strings.TrimSuffix(path, ".tarzan"))
 	if handleErr(err) {return}
 	defer out.Close()
 	_, err = out.Write(decompressed)
@@ -56,8 +56,40 @@ func Decompress (path string) {
 }
 
 func compressBytes (toCompress []byte) (compressed []byte) {
-	// TODO: add the actual algo
+	//var rowDelim byte = 500 // 111110100 in binary
+    table := make([]byte, 1, len(toCompress)/3)
+	table[0] = 0
+	//repeatedByteSlices := make([][]byte, 1, (len(toCompress)/3) + 1) // TODO: Make algo to find repeated byte slices using the subset algo
+
+	//fmt.Println(table)
+	// TODO: use info at https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wusp/2f6ddb6a-9026-43a3-b1d9-d8a19af3f03f to implement a "bitmask" so there are no edge cases
 	return toCompress
+}
+
+func byteSliceContainsSubset(targetSlice, candidateSlice []byte) bool {
+	if targetSlice == nil || candidateSlice == nil {return false}
+	if len(targetSlice) < len(candidateSlice) {return false}
+	if len(targetSlice) == len(candidateSlice) {
+		return byteSlicesAreEqual(targetSlice, candidateSlice)
+	}
+	for i := 0; i < (len(targetSlice) - len(candidateSlice) + 1); i++ {
+		if byteSlicesAreEqual(targetSlice[i:(i+len(candidateSlice))], candidateSlice) {
+			return true
+		}
+	}
+	return false
+}
+
+func byteSlicesAreEqual(a, b []byte) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
 }
 
 func Compress (path string) {
